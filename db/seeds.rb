@@ -7,42 +7,29 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 today = Date.today
-next_due = today+1.year
+two_days_ago = Date.today - 2.days
+three_days_ago = Date.today - 3.days
+dates = [today, two_days_ago, three_days_ago]
 
 User.destroy_all
 TodoList.destroy_all
-TodoItem.destroy_all
 
-users = User.create! [
-  {username: "Fiorina", password_digest:"xyx123"},
-  {username: "Trump", password_digest:"xyx124"},
-  {username: "Carson", password_digest:"xyx125"},
-  {username: "Clinton", password_digest:"xyx126"},
-]
-
-
-
-profiles = Profile.create! [
-      { first_name:"Carly" , last_name: "Fiorina", gender: "female",birth_year: 1954, user_id: 1},
-      { first_name:"Donald" , last_name: "Trump", gender: "male",birth_year:1946, user_id: 2 },
-      { first_name: "Ben" , last_name:"Carson" , gender: "male" ,birth_year: 1951, user_id: 3 },
-      { first_name: "Hillary", last_name: "Clinton", gender:"female" ,birth_year: 1947, user_id: 4}
-]
-
-
-
-User.find_by!(username: "Fiorina").todo_lists.create!(list_name: "Something1", list_due_date: next_due )
-User.find_by!(username: "Trump").todo_lists.create!(list_name: "Something2", list_due_date: next_due )
-User.find_by!(username: "Carson").todo_lists.create!(list_name: "Something3", list_due_date: next_due )
-User.find_by!(username: "Clinton").todo_lists.create!(list_name: "Something4", list_due_date: next_due )
-
+100.times { |index| TodoList.create! list_name: "List #{index}", list_due_date: dates.sample }
 
 TodoList.all.each do |list|
   list.todo_items.create! [
-    { title: "Task 1", due_date: next_due, description: "very important task TEST1", completed: false },
-    { title: "Task 2", due_date: next_due, description: "do something else TEST2", completed: true},
-    { title: "Task 3", due_date: next_due, description: "learn Action Pack TEST3", completed: true},
-    { title: "Task 4", due_date: next_due, description: "do something else TEST4", completed: true},
-    { title: "Task 4", due_date: next_due, description: "learn Action Pack TEST5", completed: true}
+    { title: "Task 1", due_date: dates.sample, description: "very important task TEST", completed: false },
+    { title: "Task 2", due_date: dates.sample, description: "do something else TEST", completed: true},
+    { title: "Task 3", due_date: dates.sample, description: "learn Action Pack TEST", completed: true}
   ]
+end
+
+users = User.create! [
+  { username: "jim", password: "abc123" },
+  { username: "rich", password: "123abc" }
+]
+
+TodoList.all.each do |list|
+  list.user = users.sample
+  list.save!
 end
