@@ -1,16 +1,17 @@
 Rails.application.routes.draw do
-
+  root to: "todo_lists#index"
   resources :sessions, only: [:new, :create, :destroy]
 
   resources :todo_lists do
     resources :todo_items
   end
-  root to: "todo_lists#index"
+
   resources :profiles
   resources :users
-
+  match "/todo_items", to: "errors#error404" , via: [ :get, :post, :patch, :delete ]
   get "/login" => "sessions#new", as: "login"
   delete "/logout" =>"sessions#destroy", as: "logout"
+  get "/?page=:page" => "todo_lists#index"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

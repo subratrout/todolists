@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
 
   before_action :ensure_login
   helper_method :logged_in?, :current_user
-
+  rescue_from ActionController::RoutingError, :with => :rescue404
+  def not_found
+    raise ActionController::RoutingError.new('Not Found')
+  end
+  #render :file => 'public/404.html', :status => :not_found, :layout => false
   protected
     def ensure_login
       redirect_to login_path unless session[:user_id]
@@ -18,4 +22,6 @@ class ApplicationController < ActionController::Base
     def current_user
       @current_user ||= User.find(session[:user_id])
     end
+
+
 end

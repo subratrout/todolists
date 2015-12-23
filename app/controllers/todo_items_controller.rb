@@ -9,7 +9,7 @@ class TodoItemsController < ApplicationController
 
   # GET /todo_items/new
   def new
-    @todo_item = TodoItem.new
+    @todo_item = @todo_list.todo_items.new
   end
 
   # GET /todo_items/1/edit
@@ -59,8 +59,7 @@ class TodoItemsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_todo_item
-      list_id = TodoList.find(params[:todo_list_id])
-      @todo_list = TodoList.find(list_id)
+      @todo_list = TodoList.find(params[:todo_list_id])
       @todo_item = @todo_list.todo_items.find(params[:id])
     end
 
